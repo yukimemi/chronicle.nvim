@@ -1,0 +1,63 @@
+*chronicle.txt*  Record read & write file history
+
+==============================================================================
+INTRODUCTION                                                       *chronicle*
+
+chronicle.nvim records the files you open and the files you write to two
+most-recent-first history files, so you can jump back to where you were.
+
+Pairs with snacks-source-chronicle for a picker. chronicle.nvim keeps the same
+file format and `vim.g.chronicle_read_path` / `vim.g.chronicle_write_path`
+globals, so that source works unchanged.
+
+Pure Lua, Neovim only. Requires Neovim >= 0.10.
+
+==============================================================================
+SETUP                                                        *chronicle-setup*
+
+>lua
+    require("chronicle").setup({
+      notify = false,
+      log_level = "warn",
+      enabled = true,
+      ignore_filetypes = { "log", "gitcommit" },
+      read_path = vim.fn.stdpath("state") .. "/chronicle/read",
+      write_path = vim.fn.stdpath("state") .. "/chronicle/write",
+      throttle_interval = 500,
+      max_entries = 0,
+    })
+<
+
+`BufRead` / `BufWritePost` append to the read history; `BufWritePost` also
+appends to the write history. Each history is most-recent-first and deduped.
+
+==============================================================================
+COMMANDS                                                  *chronicle-commands*
+
+         *:ChronicleReadOpen* *:ChronicleWriteOpen*
+:ChronicleReadOpen   Browse the read / write history in the quickfix list.
+:ChronicleWriteOpen
+
+       *:ChronicleReadReset* *:ChronicleWriteReset*
+:ChronicleReadReset  Clear the read / write history.
+:ChronicleWriteReset
+
+   *:ChronicleEnable* *:ChronicleDisable* *:ChronicleToggle*
+:ChronicleEnable     Resume / pause / toggle recording.
+:ChronicleDisable
+:ChronicleToggle
+
+==============================================================================
+LUA API                                                      *chronicle-api*
+
+    require("chronicle").read()      ~  opened files, most-recent-first
+    require("chronicle").write()     ~  written files, most-recent-first
+    require("chronicle").enable()    ~
+    require("chronicle").disable()   ~
+
+==============================================================================
+HEALTH                                                      *chronicle-health*
+
+    :checkhealth chronicle
+
+ vim:tw=78:ts=8:ft=help:norl:
