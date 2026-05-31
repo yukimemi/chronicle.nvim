@@ -28,10 +28,12 @@ function M.check()
   info("enabled: " .. tostring(state.enabled))
   info(("read history:  %s (%d entries)"):format(options.read_path, count(options.read_path)))
   info(("write history: %s (%d entries)"):format(options.write_path, count(options.write_path)))
-  info(("throttle: %dms, max_entries: %s"):format(
-    options.throttle_interval or 0,
-    (options.max_entries or 0) > 0 and tostring(options.max_entries) or "unlimited"
-  ))
+  info(
+    ("throttle: %dms, max_entries: %s"):format(
+      options.throttle_interval or 0,
+      (options.max_entries or 0) > 0 and tostring(options.max_entries) or "unlimited"
+    )
+  )
 
   if vim.g.chronicle_read_path == options.read_path then
     ok("vim.g.chronicle_read_path set (snacks-source-chronicle compatible)")
