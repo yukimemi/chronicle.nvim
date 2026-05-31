@@ -30,7 +30,24 @@ source works unchanged.
 
 ## Install
 
-With [lazy.nvim](https://github.com/folke/lazy.nvim):
+With [rvpm](https://github.com/yukimemi/rvpm) (recommended):
+
+```sh
+rvpm add yukimemi/chronicle.nvim --on-event BufReadPre,BufNewFile --on-cmd '/^Chronicle.*$/'
+```
+
+Or in `config.toml`:
+
+```toml
+[[plugins]]
+url = "https://github.com/yukimemi/chronicle.nvim"
+on_event = ["BufReadPre", "BufNewFile"]
+on_cmd = ["/^Chronicle.*$/"]
+```
+
+> rvpm doesn't auto-run `setup()` — when you pass options, call `require("chronicle").setup({ ... })` from a hook file (`plugins/github.com/yukimemi/chronicle.nvim/after.lua`).
+
+Or with [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
