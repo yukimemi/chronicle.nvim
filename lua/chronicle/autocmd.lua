@@ -8,18 +8,20 @@ function M.register()
   local group = vim.api.nvim_create_augroup(AUGROUP, { clear = true })
 
   -- Opened files (also counts a write as a read).
-  vim.api.nvim_create_autocmd({ "BufRead", "BufWritePost" }, {
+  vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
     group = group,
-    callback = function()
-      require("chronicle.chronicle").add(options.read_path, vim.api.nvim_buf_get_name(0))
+    callback = function(ev)
+      local bufpath = (ev.file and ev.file ~= "") and ev.file or vim.api.nvim_buf_get_name(ev.buf)
+      require("chronicle.chronicle").add(options.read_path, bufpath)
     end,
   })
 
   -- Written files.
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = group,
-    callback = function()
-      require("chronicle.chronicle").add(options.write_path, vim.api.nvim_buf_get_name(0))
+    callback = function(ev)
+      local bufpath = (ev.file and ev.file ~= "") and ev.file or vim.api.nvim_buf_get_name(ev.buf)
+      require("chronicle.chronicle").add(options.write_path, bufpath)
     end,
   })
 end
