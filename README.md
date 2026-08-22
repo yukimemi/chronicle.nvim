@@ -43,9 +43,17 @@ Or in `config.toml`:
 url = "https://github.com/yukimemi/chronicle.nvim"
 on_event = ["BufReadPre", "BufNewFile"]
 on_cmd = ["/^Chronicle.*$/"]
+opts = {}
 ```
 
-> rvpm doesn't auto-run `setup()` — when you pass options, call `require("chronicle").setup({ ... })` from a hook file (`plugins/github.com/yukimemi/chronicle.nvim/after.lua`).
+> Here `setup()` is **required**: the commands come up either way, but nothing
+> is switched automatically until `require("chronicle").setup(...)` installs the
+> autocmds. **rvpm >= 3.45.0 handles it for you** — put `opts = {}` (or your
+> options) in the `[[plugins]]` entry and rvpm calls
+> `require("chronicle").setup(<opts>)` right before the plugin's `after.lua`
+> (same convention as lazy.nvim's `opts`). Use a hook
+> (`rvpm edit yukimemi/chronicle.nvim --after`) only when the options need a Lua
+> function, which TOML cannot express.
 
 Or with [lazy.nvim](https://github.com/folke/lazy.nvim):
 
