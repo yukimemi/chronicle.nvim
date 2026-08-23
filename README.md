@@ -33,7 +33,7 @@ source works unchanged.
 With [rvpm](https://github.com/yukimemi/rvpm) (recommended):
 
 ```sh
-rvpm add yukimemi/chronicle.nvim --on-event BufReadPre,BufNewFile --on-cmd '/^Chronicle.*$/'
+rvpm add yukimemi/chronicle.nvim --on-event BufReadPre,BufNewFile --on-cmd '/^Chronicle.*$/' --setup '{}'
 ```
 
 Or in `config.toml`:
@@ -43,17 +43,20 @@ Or in `config.toml`:
 url = "https://github.com/yukimemi/chronicle.nvim"
 on_event = ["BufReadPre", "BufNewFile"]
 on_cmd = ["/^Chronicle.*$/"]
-opts = {}
+setup = {}
 ```
 
 > Here `setup()` is **required**: the commands come up either way, but nothing
 > is switched automatically until `require("chronicle").setup(...)` installs the
-> autocmds. **rvpm >= 3.45.0 handles it for you** — put `opts = {}` (or your
-> options) in the `[[plugins]]` entry and rvpm calls
-> `require("chronicle").setup(<opts>)` right before the plugin's `after.lua`
-> (same convention as lazy.nvim's `opts`). Use a hook
-> (`rvpm edit yukimemi/chronicle.nvim --after`) only when the options need a Lua
-> function, which TOML cannot express.
+> autocmds. **rvpm >= 3.48.0 handles it for you** — give the `[[plugins]]` entry
+> a `setup` field and rvpm calls `require("chronicle").setup(<opts>)` right
+> before the plugin's `after.lua`. `setup = {}` means "call setup with no
+> options"; `setup = { notify = true }` passes that table as the options. Leave
+> `setup` out entirely and rvpm never calls setup. Use a hook
+> (`rvpm edit yukimemi/chronicle.nvim --after`) when the options need a Lua
+> function, which TOML cannot express — but never set up the same module in both
+> places. If a single setup call needs both plain data and a Lua function, keep
+> the whole call in `after.lua` and omit `setup`.
 
 Or with [lazy.nvim](https://github.com/folke/lazy.nvim):
 
